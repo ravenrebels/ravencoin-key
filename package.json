@@ -1,7 +1,7 @@
 {
   "name": "@ravenrebels/ravencoin-key",
-  "version": "0.0.1",
-  "description": "Generate Ravencoin addresses from mnemonic keys. BIP32, BIP39, BIP44",
+  "version": "0.9.1",
+  "description": "Generate Ravencoin addresses from mnemonic code. BIP32, BIP39, BIP44",
   "source": "index.ts",
   "main": "dist/main.js",
   "module": "dist/module.js",
@@ -9,7 +9,7 @@
   "scripts": {
     "browserify": "browserify ./dist/main.js  --standalone RavencoinKey -o ./dist/RavencoinKey.js",
     "build": "npx parcel build && npm run browserify",
-    "test": "jest"
+    "test": "jest ./test.js"
   },
   "repository": {
     "type": "git",

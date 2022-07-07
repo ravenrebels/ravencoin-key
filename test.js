@@ -1,22 +1,44 @@
-const RavencoinHandler = require("./dist/main");
-test("Random mnemonic should contain 12 words", () => {
-  const mnemonic = RavencoinHandler.generateMnemonic();
+const RavencoinKey = require("./dist/main");
 
+test("Random mnemonic should contain 12 words", () => {
+  const mnemonic = RavencoinKey.generateMnemonic();
   expect(mnemonic.split(" ").length).toBe(12);
 });
 
-test("Validate address", () => {
+test("Validate address on main-net", () => {
+  const network = "rvn";
   const mnemonic =
     "orphan resemble brain dwarf bus fancy horn among cricket logic duty crater";
-  const address = RavencoinHandler.getDerivedAddress(mnemonic, 0, 1);
+  const address = RavencoinKey.getAddressPair(network, mnemonic, 0, 1);
   expect(address.external.address).toBe("RKbP9SMo2KTKWsiTrEDhTWPuaTwfuPiN8G");
 });
 
-
-test("Validate Wallet Import Format (WIF) ", () => {
+test("Validate address on test-net", () => {
+  const network = "rvn-test";
   const mnemonic =
     "orphan resemble brain dwarf bus fancy horn among cricket logic duty crater";
-  const address = RavencoinHandler.getDerivedAddress(mnemonic, 0, 1);
-  console.log(address);
-  expect(address.external.WIF).toBe("KyWuYcev1hJ7YJZTjWx8coXNRm4jRbMEhgVVVC8vDcTaKRCMASUE");
+  const address = RavencoinKey.getAddressPair(network, mnemonic, 0, 1);
+  expect(address.external.address).toBe("mqq9MyZVEX61Dypt6dCxBuH2gC5nCUpTg6");
+});
+
+test("Validate Wallet Import Format (WIF) main-net ", () => {
+  const network = "rvn";
+  const mnemonic =
+    "orphan resemble brain dwarf bus fancy horn among cricket logic duty crater";
+  const address = RavencoinKey.getAddressPair(network, mnemonic, 0, 1);
+
+  expect(address.external.WIF).toBe(
+    "KyWuYcev1hJ7YJZTjWx8coXNRm4jRbMEhgVVVC8vDcTaKRCMASUE"
+  );
+});
+
+test("Validate Wallet Import Format (WIF) test-net ", () => {
+  const network = "rvn-test";
+  const mnemonic =
+    "orphan resemble brain dwarf bus fancy horn among cricket logic duty crater";
+  const address = RavencoinKey.getAddressPair(network, mnemonic, 0, 1);
+
+  expect(address.external.WIF).toBe(
+    "cPsu1XemSkzNhk2j7vmFz82S3zN963SvmidxbcbRij7aaAFdPAnj"
+  );
 });
