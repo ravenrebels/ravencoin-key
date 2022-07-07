@@ -15,7 +15,7 @@
     "type": "git",
     "url": "git+https://github.com/ravenrebels/ravencoin-key.git"
   },
-  "keywords": [],
+  "keywords": ["Ravencoin", "BIP44"],
   "author": "Dick Henrik Larsson",
   "license": "MIT",
   "bugs": {
