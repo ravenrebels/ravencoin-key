@@ -1,2 +1,94 @@
 # ravencoin-key
-Generate Ravencoin addresses from mnemonic keys, BIP39, BIP44
+
+Generate Ravencoin addresses from a mnemonic phrase following the standards BIP32, BIP39, BIP44.
+
+That is, use your 12 words to get addresses for Ravencoin main and test-net.
+
+This package uses coinkey, hdkey and coinkey to generate Ravencoin addresses.
+## Example
+```
+import RavencoinKey from "@ravenrebels/ravencoin-key";
+
+const mnemonic = RavencoinKey.generateMnemonic();
+const ACCOUNT = 0;
+const POSITION = 1;
+const address = RavencoinKey.getDerivedAddress(mnemonic, ACCOUNT, POSITION);
+
+console.log("Mnemonic", mnemonic);
+console.log("Address", address); 
+
+```
+
+## How to import into your project
+```
+//As ES6 module
+import RavencoinKey from "@ravenrebels/ravencoin-key";
+```
+```
+//As CommonsJS module
+const RavencoinKey = require("@ravenrebels/ravencoin-key");
+```
+```
+//A browseriy:d version, with all the dependencies bundled for the web
+<html>
+  <body> 
+    <script src="./node_modules/@ravenrebels/ravencoin-key/dist/RavencoinKey.js"></script> 
+    <script>
+      alert(RavencoinKey.generateMnemonic());
+    </script>
+  </body>
+</html>
+``` 
+## install
+` npm install @ravenrebels/ravencoin-key`
+
+## build
+` npm run build`
+
+## test
+` npm test `
+
+Note, the tests run on the built version, so you need to build before you run the tests
+
+## BIP32
+
+> BIP32 is the specification which introduced the standard for hierarchical deterministic (HD) wallets and extended keys to Bitcoin. Deterministic wallets can generate multiple "child" key pair chains from a master private "root" key in a deterministic way.[5][6] With the adoption of this standard, keys could be transferred between wallet software with a single extended private key (xprv), greatly improving the interoperability of wallets.
+
+Quote from: https://en.m.wikipedia.org/wiki/Bitcoin_Improvement_Proposals#BIP32
+
+Source: https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
+
+## BIP39
+
+> BIP39 is a proposal describing the use of plain language words chosen from a specific word list,[8] and the process for using such a string to derive a random seed used to generate a wallet as described in BIP32. This approach of utilizing a mnemonic phrase offered a much more user friendly experience for backup and recovery of cryptocurrency wallets.
+
+Quote from: https://en.m.wikipedia.org/wiki/Bitcoin_Improvement_Proposals#BIP39
+
+Source: https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki
+
+## BIP44
+
+> BIP44 defines a logical hierarchy for deterministic wallets based on an algorithm described in BIP32 and purpose scheme described in BIP43. It allows the handling of multiple coins, multiple accounts, external and internal chains per account and millions of addresses per chain
+
+Quote from: https://en.m.wikipedia.org/wiki/Bitcoin_Improvement_Proposals#BIP44
+
+Source: https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
+
+`m / purpose' / coin_type' / account' / change / address_index`
+
+So in the case of Ravencoin the path m/44'/175'/0'/0/1 says "give me the first address"
+
+The first part m/44'/175' says that the purpose is to use BIP44 with Ravencoin (175). Consider that static code.
+
+Accounts is deprecated and should be 0
+
+Change: should be 0 or 1, 0 for external addresses and 1 for the change address
+
+### Address gap limit
+>Address gap limit is currently set to 20. If the software hits 20 unused addresses in a row, it expects there are no used addresses beyond this point and stops searching the address chain. We scan just the external chains, because internal chains receive only coins that come from the associated external chains.
+>
+>Wallet software should warn when the user is trying to exceed the gap limit on an external chain by generating a new address.
+
+Source: https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
+
+

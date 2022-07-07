@@ -1,0 +1,40 @@
+{
+  "name": "@ravenrebels/ravencoin-key",
+  "version": "0.0.1",
+  "description": "Generate Ravencoin addresses from mnemonic keys. BIP32, BIP39, BIP44",
+  "source": "index.ts",
+  "main": "dist/main.js",
+  "module": "dist/module.js",
+  "types": "dist/types.d.ts",
+  "scripts": {
+    "browserify": "browserify ./dist/main.js  --standalone RavencoinKey -o ./dist/RavencoinKey.js",
+    "build": "npx parcel build && npm run browserify",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ravenrebels/ravencoin-key.git"
+  },
+  "keywords": [],
+  "author": "Dick Henrik Larsson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ravenrebels/ravencoin-key/issues"
+  },
+  "homepage": "https://github.com/ravenrebels/ravencoin-key#readme",
+  "dependencies": {
+    "bip39": "^3.0.4",
+    "coininfo": "^5.2.1",
+    "coinkey": "^3.0.0",
+    "hdkey": "^2.0.1"
+  },
+  "devDependencies": {
+    "@parcel/packager-ts": "^2.6.2",
+    "@parcel/transformer-typescript-types": "^2.6.2",
+    "@types/hdkey": "^2.0.1",
+    "@types/node": "^18.0.3",
+    "browserify": "^17.0.0",
+    "jest": "^28.1.2",
+    "parcel": "^2.6.2"
+  }
+}

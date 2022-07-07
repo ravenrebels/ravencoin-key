@@ -1,3 +1,8 @@
+# totally do not need the parcel-cache version controlled
+.parcel-cache
+# We publish the dist folder to npm, not git
+dist
+
 # Logs
 logs
 *.log
