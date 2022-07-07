@@ -38,11 +38,13 @@ export function getDerivedAddress(
 
 export function getAddressByPath(hdKey, path) {
   const derived = hdKey.derive(path);
-  var ck2 = new CoinKey(derived.privateKey, ravencoin);
+  var ck2 = new CoinKey(derived.privateKey, ravencoin); 
+  
   return {
     address: ck2.publicAddress,
     path: path,
     privateKey: derived.privateKey,
+    WIF: ck2.privateWif,
   };
 }
 
