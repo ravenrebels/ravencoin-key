@@ -9,8 +9,6 @@ const CoinKey = require("coinkey");
 //From seed to key
 const HDKey = require("hdkey");
 
-
-
 //Could not declare Network as enum, something wrong with parcel bundler
 export type Network = "rvn" | "rvn-test";
 
@@ -25,11 +23,11 @@ function getNetwork(name: Network) {
   throw new Error("network must be of value 'rvn' or 'rvn-test'");
 }
 
-/** 
+/**
  * @param network - should have value "rvn" for main-net and "rvn-test" for test-net
  * @param mnemonic - your mnemonic
  * @param account - accounts in BIP44 starts from 0, 0 is the default account
- * @param position - starts from 1
+ * @param position - starts from 0
  */
 export function getAddressPair(
   network: Network,

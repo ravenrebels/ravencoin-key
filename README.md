@@ -8,15 +8,16 @@ This package uses coinkey, hdkey and coinkey to generate Ravencoin addresses.
 
 ## Example get external and internal (change) addresses by path
 
-A simple and "spot on" way to generate/derive addresses. 
+A simple and "spot on" way to generate/derive addresses.
 
 If you need brutal performance check out getAddressByPath example below.
+
 ```
 import RavencoinKey from "@ravenrebels/ravencoin-key";
 
 const mnemonic = RavencoinKey.generateMnemonic();
 const ACCOUNT = 0; //default is zero
-const POSITION = 1; //the first address for this wallet
+const POSITION = 0; //the first address for this wallet
 const network = "rvn"; //or rvn-test for test-net
 const addressPair = RavencoinKey.getAddressPair(
   network,
@@ -33,35 +34,37 @@ console.log(addressPair);
 Outputs
 
 ```
-Mnemonic orphan medal tortoise can pioneer mirror road scrub sort chimney pig taxi
+Mnemonic opera mix rain frog renew come where basket inject manage choice book
 {
   internal: {
-    address: 'RW2sBPBKikPyn1hgwnYtfALQF6ZsX26qsF',
-    path: "m/44'/175'/0'/1/1",
-    privateKey: <Buffer 64 ad 31 24 a5 7e 13 e4 62 ba 6c f2 f6 96 3b f4 59 51 bf b7 c2 35 94 32 24 a8 8c 0f a8 63 21 f0>,
-    WIF: 'KzbQuFn3uhpkSPV39TGfAksoSJHSCeuejF3NYvbo6oCY9kzntXSf'
+    address: 'REj8jn44GxUGxtYvarnzUsZZPvGtjnUPd8',
+    path: "m/44'/175'/0'/1/0",
+    privateKey: <Buffer 59 1f 25 b5 8c 95 34 4e ee 61 c7 96 d0 d3 3a 0b 6c 7e 2b d9 f2 3d da 6e cb 57 1d 68 5a 48 e1 f5>,
+    WIF: 'KzCx9yVMaMzbQZBW8qYY7p9hiptwJkbpr4nT5PsncfUpXFMM2rR2'
   },
   external: {
-    address: 'RWCDqxekxfHX7RbgkpQ2NnWPR3VMAacP55',
-    path: "m/44'/175'/0'/0/1",
-    privateKey: <Buffer d9 8c b7 4a ff d4 09 91 5e d0 bc 1c e7 20 d8 5e d0 cf 8e 88 84 41 4b 57 47 88 64 e1 5e 29 66 24>,
-    WIF: 'L4WbhLhhG8NbuNaH4HpWAumYvGJ9RsneS2DyaHLv8orLEKircVKh'
+    address: 'RDR8m2Stop1VfZV2zZgT2RZjvQMsTpYyfZ',
+    path: "m/44'/175'/0'/0/0",
+    privateKey: <Buffer 23 a5 f4 47 99 d4 54 01 79 26 96 e4 7c 0a 01 2e 46 25 b7 17 bc ae 2a 73 16 49 c5 4b ee cc f5 02>,
+    WIF: 'KxR1KukR5DiqKQecUnXFQwQ8NJxiaWyswz2E93dsCgbziYaVEA1f'
   },
-  position: 1
+  position: 0
 }
 ```
 
 ## Example get the first public address for a wallet by BIP44 path
+
 Note this is the fastest way to generate/derive addresses since we can re-use the hdKey object.
 
 BUT its more technical since you have to provide the full BIP44 path.
+
 ```
 import RavencoinKey from "@ravenrebels/ravencoin-key";
 
 //use RavencoinKey.generateMnemonic() to generate mnemonic codes
 const mnemonic =
   "Mnemonic erosion total live dial hamster helmet top response cash obey anger balcony";
-const path = "m/44'/175'/0'/0/1";
+const path = "m/44'/175'/0'/0/0";
 const network = "rvn"; //or rvn-test for test-net
 const hdKey = RavencoinKey.getHDKey("rvn", mnemonic);
 
@@ -75,10 +78,10 @@ Outputs
 
 ```
 {
-  address: 'RHNTijkjfM5jim31wj52suQPGEJpdC7s1r',
-  path: "m/44'/175'/0'/0/1",
-  privateKey: <Buffer d8 51 e3 d6 9c d3 76 a6 a2 0c 3d 30 fd 04 d7 f9 4b c4 3c 56 66 27 e0 22 42 5b 1a 4b 91 20 ae 2a>,
-  WIF: 'L4UD3XsHkQ8huhbWeTFmqEb6FTLQQiPquB7CJkaN4fT9iL85GRW7'
+  address: 'RWj697pj6PijkEcJLW3BLPG4GKre3BtgRP',
+  path: "m/44'/175'/0'/0/0",
+  privateKey: <Buffer a5 59 24 34 53 2a 09 a7 33 50 90 6f 78 46 d2 72 13 5a 56 b5 a3 4d 90 06 59 b3 1d 2b b1 aa 6d fe>,
+  WIF: 'L2m8GmGYVAkvUEtLdhbFidQW2Zn3fULpE7sbWgmXChygNEBPd1PK'
 }
 ```
 
@@ -146,7 +149,7 @@ Source: https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
 
 `m / purpose' / coin_type' / account' / change / address_index`
 
-So in the case of Ravencoin the path m/44'/175'/0'/0/1 says "give me the first address"
+So in the case of Ravencoin the path m/44'/175'/0'/0/0 says "give me the first address"
 
 The first part m/44'/175' says that the purpose is to use BIP44 with Ravencoin (175). Consider that static code.
 
