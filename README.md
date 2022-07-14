@@ -4,7 +4,7 @@ Generate Ravencoin addresses from a mnemonic phrase following the standards BIP3
 
 That is, use your 12 words to get addresses for Ravencoin main and test-net.
 
-This package uses coinkey, hdkey and coinkey to generate Ravencoin addresses.
+This package uses coininfo, hdkey and coinkey to generate Ravencoin addresses.
 
 ## Example get external and internal (change) addresses by path
 
@@ -14,6 +14,8 @@ If you need brutal performance check out getAddressByPath example below.
 
 ```
 import RavencoinKey from "@ravenrebels/ravencoin-key";
+//Or import as CommonsJS module
+//const RavencoinKey = require("@ravenrebels/ravencoin-key");
 
 const mnemonic = RavencoinKey.generateMnemonic();
 const ACCOUNT = 0; //default is zero
@@ -86,17 +88,17 @@ Outputs
 ```
 
 ## How to import into your project
-
+### ES6 module
 ```
 //As ES6 module
 import RavencoinKey from "@ravenrebels/ravencoin-key";
 ```
-
+### CommonsJS module
 ```
 //As CommonsJS module
 const RavencoinKey = require("@ravenrebels/ravencoin-key");
 ```
-
+### Browserify
 ```
 //A browseriy:d version, with all the dependencies bundled for the web
 <html>
