@@ -36,19 +36,19 @@ console.log(addressPair);
 Outputs
 
 ```
-Mnemonic opera mix rain frog renew come where basket inject manage choice book
+Mnemonic wrong breeze brick wrestle exotic erode news clown copy install marble promote
 {
   internal: {
-    address: 'REj8jn44GxUGxtYvarnzUsZZPvGtjnUPd8',
+    address: 'RC7Vn28tGaNrJtBm8MX5RCeCvzMpqZ1MgG',
     path: "m/44'/175'/0'/1/0",
-    privateKey: <Buffer 59 1f 25 b5 8c 95 34 4e ee 61 c7 96 d0 d3 3a 0b 6c 7e 2b d9 f2 3d da 6e cb 57 1d 68 5a 48 e1 f5>,
-    WIF: 'KzCx9yVMaMzbQZBW8qYY7p9hiptwJkbpr4nT5PsncfUpXFMM2rR2'
+    privateKey: 'a2c71a4284ed6792debd68d830a10515051fd166ce00535bf9fd19573ed5413b',
+    WIF: 'L2g8U3ZNBLBQcy5f6C67h2eosps3MGkNmeNnk6Y8fZiMdSB9TuCJ'
   },
   external: {
-    address: 'RDR8m2Stop1VfZV2zZgT2RZjvQMsTpYyfZ',
+    address: 'RE8YxTSYYcftnbX56rnAEwaiddqaqt8UgX',
     path: "m/44'/175'/0'/0/0",
-    privateKey: <Buffer 23 a5 f4 47 99 d4 54 01 79 26 96 e4 7c 0a 01 2e 46 25 b7 17 bc ae 2a 73 16 49 c5 4b ee cc f5 02>,
-    WIF: 'KxR1KukR5DiqKQecUnXFQwQ8NJxiaWyswz2E93dsCgbziYaVEA1f'
+    privateKey: 'b998a218e6bfde7162460893f79afc14b82b14e368507f5a85de28848ea96439',
+    WIF: 'L3SV871B2mpUPTvj4U38UEp3Ah3wCVukF7tG2btHgjkiUSXRftSw'
   },
   position: 0
 }
@@ -82,23 +82,29 @@ Outputs
 {
   address: 'RWj697pj6PijkEcJLW3BLPG4GKre3BtgRP',
   path: "m/44'/175'/0'/0/0",
-  privateKey: <Buffer a5 59 24 34 53 2a 09 a7 33 50 90 6f 78 46 d2 72 13 5a 56 b5 a3 4d 90 06 59 b3 1d 2b b1 aa 6d fe>,
+  privateKey: 'a5592434532a09a73350906f7846d272135a56b5a34d900659b31d2bb1aa6dfe',
   WIF: 'L2m8GmGYVAkvUEtLdhbFidQW2Zn3fULpE7sbWgmXChygNEBPd1PK'
 }
 ```
 
 ## How to import into your project
+
 ### ES6 module
+
 ```
 //As ES6 module
 import RavencoinKey from "@ravenrebels/ravencoin-key";
 ```
+
 ### CommonsJS module
+
 ```
 //As CommonsJS module
 const RavencoinKey = require("@ravenrebels/ravencoin-key");
 ```
+
 ### Browserify
+
 ```
 //A browseriy:d version, with all the dependencies bundled for the web
 <html>

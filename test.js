@@ -27,6 +27,7 @@ test("Validate Wallet Import Format (WIF) main-net ", () => {
     "orphan resemble brain dwarf bus fancy horn among cricket logic duty crater";
   const address = RavencoinKey.getAddressPair(network, mnemonic, 0, 1);
 
+  expect(address.internal.address).toBe("RLnvUoy29k3QiQgtR6PL416rSNfHTuwhyU");
   expect(address.external.WIF).toBe(
     "KyWuYcev1hJ7YJZTjWx8coXNRm4jRbMEhgVVVC8vDcTaKRCMASUE"
   );
@@ -41,4 +42,12 @@ test("Validate Wallet Import Format (WIF) test-net ", () => {
   expect(address.external.WIF).toBe(
     "cPsu1XemSkzNhk2j7vmFz82S3zN963SvmidxbcbRij7aaAFdPAnj"
   );
+});
+
+test("Validate get public address from Wallet Import Format (WIF) main-et ", () => {
+  const network = "rvn";
+  const WIF = "KyWuYcev1hJ7YJZTjWx8coXNRm4jRbMEhgVVVC8vDcTaKRCMASUE";
+  const addressObject = RavencoinKey.getAddressByWIF(network, WIF);
+
+  expect(addressObject.address).toBe("RKbP9SMo2KTKWsiTrEDhTWPuaTwfuPiN8G");
 });

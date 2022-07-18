@@ -68,7 +68,7 @@ export function getAddressByPath(network: Network, hdKey: any, path: string) {
   return {
     address: ck2.publicAddress,
     path: path,
-    privateKey: derived.privateKey,
+    privateKey: ck2.privateKey.toString("hex"),
     WIF: ck2.privateWif,
   };
 }
@@ -80,10 +80,29 @@ export function generateMnemonic() {
 export function isMnemonicValid(mnemonic) {
   return bip39.validateMnemonic(mnemonic);
 }
+/**
+ *
+ * @param privateKeyWIF
+ * @param network  should be "rvn" or "rvn-test"
+ * @returns object {address, privateKey (hex), WIF}
+ */
+
+export function getAddressByWIF(network: Network, privateKeyWIF: string) {
+  const coinKey = CoinKey.fromWif(privateKeyWIF);
+  coinKey.versions = coininfo(network).versions;
+
+  return {
+    address: coinKey.publicAddress,
+    privateKey: coinKey.privateKey.toString("hex"),
+    WIF: coinKey.privateWif,
+  };
+}
 
 export default {
   getAddressByPath,
+  getAddressByWIF,
   getAddressPair,
   generateMnemonic,
+
   isMnemonicValid,
 };
