@@ -51,3 +51,21 @@ test("Validate get public address from Wallet Import Format (WIF) main-et ", () 
 
   expect(addressObject.address).toBe("RKbP9SMo2KTKWsiTrEDhTWPuaTwfuPiN8G");
 });
+
+test("Valid bytes to mnemonic", () => {
+  const hexString = "a10a95fb55808c5f15dc97ecbcd26cf0";
+  const bytes = Uint8Array.from(Buffer.from(hexString, "hex"));
+  const mnemonic = RavencoinKey.entropyToMnemonic(bytes);
+  expect(mnemonic).toBe(
+    "patient feed learn prison angle convince first napkin uncover track open theory"
+  );
+});
+
+test("Non valid bytes to mnemonic should fail", () => {
+  const hexString = "a10a94fb55808c5f15dc97ecbcd26cf0";
+  const bytes = Uint8Array.from(Buffer.from(hexString, "hex"));
+  const mnemonic = RavencoinKey.entropyToMnemonic(bytes);
+  expect(mnemonic).not.toBe(
+    "patient feed learn prison angle convince first napkin uncover track open theory"
+  );
+});

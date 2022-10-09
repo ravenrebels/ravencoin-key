@@ -1,6 +1,6 @@
 {
   "name": "@ravenrebels/ravencoin-key",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Generate Ravencoin addresses from mnemonic code. BIP32, BIP39, BIP44",
   "source": "index.ts",
   "main": "dist/main.js",
@@ -17,9 +17,10 @@
   },
   "keywords": [
     "Ravencoin",
-    "BIP44"
+    "BIP44",
+    "BIP39"
   ],
-  "author": "Dick Henrik Larsson",
+  "author": "Raven Rebels / Dick Henrik Larsson",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ravenrebels/ravencoin-key/issues"

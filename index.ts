@@ -77,7 +77,7 @@ export function generateMnemonic() {
   return bip39.generateMnemonic();
 }
 
-export function isMnemonicValid(mnemonic) {
+export function isMnemonicValid(mnemonic: string) {
   return bip39.validateMnemonic(mnemonic);
 }
 /**
@@ -98,11 +98,13 @@ export function getAddressByWIF(network: Network, privateKeyWIF: string) {
   };
 }
 
+export const entropyToMnemonic = bip39.entropyToMnemonic;
+
 export default {
   getAddressByPath,
   getAddressByWIF,
   getAddressPair,
   generateMnemonic,
-
+  entropyToMnemonic,
   isMnemonicValid,
 };
