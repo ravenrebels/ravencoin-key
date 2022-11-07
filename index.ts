@@ -37,13 +37,17 @@ export function getAddressPair(
 ) {
   const hdKey = getHDKey(network, mnemonic);
 
+  const coin_type = network == "rvn" ? 175 : 1;
+  //coint_type should always be 1 according to SLIP-0044
+  //https://github.com/satoshilabs/slips/blob/master/slip-0044.md
+
   //Syntax of BIP44
   //m / purpose' / coin_type' / account' / change / address_index
-  const externalPath = `m/44'/175'/${account}'/0/${position}`;
+  const externalPath = `m/44'/${coin_type}'/${account}'/0/${position}`;
   const externalAddress = getAddressByPath(network, hdKey, externalPath);
 
   //change address
-  const internalPath = `m/44'/175'/${account}'/1/${position}`;
+  const internalPath = `m/44'/${coin_type}'/${account}'/1/${position}`;
   const internalAddress = getAddressByPath(network, hdKey, internalPath);
   return {
     internal: internalAddress,

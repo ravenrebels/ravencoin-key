@@ -18,7 +18,7 @@ test("Validate address on test-net", () => {
   const mnemonic =
     "orphan resemble brain dwarf bus fancy horn among cricket logic duty crater";
   const address = RavencoinKey.getAddressPair(network, mnemonic, 0, 1);
-  expect(address.external.address).toBe("mqq9MyZVEX61Dypt6dCxBuH2gC5nCUpTg6");
+  expect(address.external.address).toBe("n1nUspcdAaDAMfx2ksZJ5cDa7UKVEGstrX");
 });
 
 test("Validate Wallet Import Format (WIF) main-net ", () => {
@@ -40,7 +40,7 @@ test("Validate Wallet Import Format (WIF) test-net ", () => {
   const address = RavencoinKey.getAddressPair(network, mnemonic, 0, 1);
 
   expect(address.external.WIF).toBe(
-    "cPsu1XemSkzNhk2j7vmFz82S3zN963SvmidxbcbRij7aaAFdPAnj"
+    "cPchRRmzZXtPeFLHfrh8qcwaRaziJCS4gcAMBVVQh1EiehNyBtKB"
   );
 });
 
