@@ -105,10 +105,11 @@ export function getAddressByWIF(network: Network, privateKeyWIF: string) {
 export const entropyToMnemonic = bip39.entropyToMnemonic;
 
 export default {
+  entropyToMnemonic,
   getAddressByPath,
   getAddressByWIF,
   getAddressPair,
+  getHDKey,
   generateMnemonic,
-  entropyToMnemonic,
   isMnemonicValid,
 };
