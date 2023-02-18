@@ -2,9 +2,9 @@
 
 Generate Ravencoin addresses from a mnemonic phrase following the standards BIP32, BIP39, BIP44.
 
-That is, use your 12 words to get addresses for Ravencoin main and test-net.
+That is, use your 12 words to get addresses for Ravencoin mainnet and testnet.
+The library also support Evrmorecoin EVR, both mainnet and testnet.
 
-This package uses coininfo, hdkey and coinkey to generate Ravencoin addresses.
 
 ## Example get external and internal (change) addresses by path
 
@@ -20,7 +20,7 @@ import RavencoinKey from "@ravenrebels/ravencoin-key";
 const mnemonic = RavencoinKey.generateMnemonic();
 const ACCOUNT = 0; //default is zero
 const POSITION = 0; //the first address for this wallet
-const network = "rvn"; //or rvn-test for test-net
+const network = "rvn"; //or rvn-test for testnet
 const addressPair = RavencoinKey.getAddressPair(
   network,
   mnemonic,
@@ -67,7 +67,7 @@ import RavencoinKey from "@ravenrebels/ravencoin-key";
 const mnemonic =
   "Mnemonic erosion total live dial hamster helmet top response cash obey anger balcony";
 const path = "m/44'/175'/0'/0/0";
-const network = "rvn"; //or rvn-test for test-net
+const network = "rvn"; //or rvn-test for testnet
 const hdKey = RavencoinKey.getHDKey("rvn", mnemonic);
 
 const address = RavencoinKey.getAddressByPath(network, hdKey, path);

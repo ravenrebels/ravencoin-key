@@ -1,5 +1,5 @@
-//coininfo gives us meta data about a bunch of crypto currencies, including Ravencoin
-import coininfo from "coininfo";
+//Gives us meta data about coins/chains
+import { chains } from "@hyperbitjs/chains";
 
 //bip39 from mnemonic to seed
 import * as bip39 from "bip39";
@@ -10,21 +10,26 @@ const CoinKey = require("coinkey");
 const HDKey = require("hdkey");
 
 //Could not declare Network as enum, something wrong with parcel bundler
-export type Network = "rvn" | "rvn-test";
+export type Network = "rvn" | "rvn-test" | "evr" | "evr-test";
 
 function getNetwork(name: Network) {
   const c = name.toLowerCase(); //Just to be sure
+  const map = {
+    rvn: chains.rvn.main.versions,
+    "rvn-test": chains.rvn.test.versions,
+    evr: chains.evr.main.versions,
+    "evr-test": chains.evr.test.versions,
+  };
 
-  if (c === "rvn") {
-    return coininfo("RVN").versions;
-  } else if (c === "rvn-test") {
-    return coininfo("RVN-TEST").versions;
+  const network = map[c];
+  if (!network) {
+    throw new Error("network must be of value " + Object.keys(map).toString());
   }
-  throw new Error("network must be of value 'rvn' or 'rvn-test'");
+  return network;
 }
 
 /**
- * @param network - should have value "rvn" for main-net and "rvn-test" for test-net
+ * @param network - should have value "rvn", "rvn-test", "evr" or "evr-test"
  * @param mnemonic - your mnemonic
  * @param account - accounts in BIP44 starts from 0, 0 is the default account
  * @param position - starts from 0
@@ -36,8 +41,8 @@ export function getAddressPair(
   position: number
 ) {
   const hdKey = getHDKey(network, mnemonic);
-
-  const coin_type = network == "rvn" ? 175 : 1;
+  const chain = getNetwork(network);
+  const coin_type = chain.bip44;
   //coint_type should always be 1 according to SLIP-0044
   //https://github.com/satoshilabs/slips/blob/master/slip-0044.md
 
@@ -57,17 +62,17 @@ export function getAddressPair(
 }
 
 export function getHDKey(network: Network, mnemonic: string): any {
-  const ravencoin = getNetwork(network);
+  const chain = getNetwork(network);
   const seed = bip39.mnemonicToSeedSync(mnemonic).toString("hex");
   //From the seed, get a hdKey, can we use CoinKey instead?
-  const hdKey = HDKey.fromMasterSeed(Buffer.from(seed, "hex"), ravencoin.bip32);
+  const hdKey = HDKey.fromMasterSeed(Buffer.from(seed, "hex"), chain.bip32);
   return hdKey;
 }
 
 export function getAddressByPath(network: Network, hdKey: any, path: string) {
-  const ravencoin = getNetwork(network);
+  const chain = getNetwork(network);
   const derived = hdKey.derive(path);
-  var ck2 = new CoinKey(derived.privateKey, ravencoin);
+  var ck2 = new CoinKey(derived.privateKey, chain);
 
   return {
     address: ck2.publicAddress,
@@ -93,7 +98,7 @@ export function isMnemonicValid(mnemonic: string) {
 
 export function getAddressByWIF(network: Network, privateKeyWIF: string) {
   const coinKey = CoinKey.fromWif(privateKeyWIF);
-  coinKey.versions = coininfo(network).versions;
+  coinKey.versions = getNetwork(network);
 
   return {
     address: coinKey.publicAddress,
