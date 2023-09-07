@@ -121,6 +121,7 @@ export default {
   getAddressByPath,
   getAddressByWIF,
   getAddressPair,
+  getCoinType,
   getHDKey,
   generateMnemonic,
   isMnemonicValid,
