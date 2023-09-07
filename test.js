@@ -44,7 +44,7 @@ test("Validate Wallet Import Format (WIF) test-net ", () => {
   );
 });
 
-test("Validate get public address from Wallet Import Format (WIF) main-et ", () => {
+test("Validate get public address from Wallet Import Format (WIF) main-net ", () => {
   const network = "rvn";
   const WIF = "KyWuYcev1hJ7YJZTjWx8coXNRm4jRbMEhgVVVC8vDcTaKRCMASUE";
   const addressObject = RavencoinKey.getAddressByWIF(network, WIF);

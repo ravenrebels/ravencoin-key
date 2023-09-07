@@ -27,7 +27,15 @@ function getNetwork(name: Network) {
   }
   return network;
 }
-
+/**
+ *
+ * @param network
+ * @returns the coin type for the network (blockchain), for example Ravencoin has coin type 175
+ */
+export function getCoinType(network: Network) {
+  const chain = getNetwork(network);
+  return chain.bip44;
+}
 /**
  * @param network - should have value "rvn", "rvn-test", "evr" or "evr-test"
  * @param mnemonic - your mnemonic
@@ -41,9 +49,8 @@ export function getAddressPair(
   position: number
 ) {
   const hdKey = getHDKey(network, mnemonic);
-  const chain = getNetwork(network);
-  const coin_type = chain.bip44;
-  //coint_type should always be 1 according to SLIP-0044
+  const coin_type = getCoinType(network);
+
   //https://github.com/satoshilabs/slips/blob/master/slip-0044.md
 
   //Syntax of BIP44
