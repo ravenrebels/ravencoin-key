@@ -7,7 +7,8 @@ import * as bip39 from "bip39";
 const CoinKey = require("coinkey");
 
 //From seed to key
-const HDKey = require("hdkey");
+//const HDKey = require("hdkey");
+import HDKey from "hdkey";
 
 //Could not declare Network as enum, something wrong with parcel bundler
 export type Network = "rvn" | "rvn-test" | "evr" | "evr-test";
@@ -116,13 +117,28 @@ export function getAddressByWIF(network: Network, privateKeyWIF: string) {
 
 export const entropyToMnemonic = bip39.entropyToMnemonic;
 
+export function generateAddress(network: Network = "rvn") {
+  const mnemonic = generateMnemonic();
+  const account = 0;
+  const position = 0;
+  const addressPair = getAddressPair(network, mnemonic, account, position);
+  const addressObject = addressPair.external;
+
+  const result = {
+    ...addressObject,
+    mnemonic,
+    network,
+  };
+  return result;
+}
 export default {
   entropyToMnemonic,
+  generateAddress,
+  generateMnemonic,
   getAddressByPath,
   getAddressByWIF,
   getAddressPair,
   getCoinType,
   getHDKey,
-  generateMnemonic,
   isMnemonicValid,
 };

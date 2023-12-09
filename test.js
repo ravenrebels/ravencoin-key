@@ -69,3 +69,26 @@ test("Non valid bytes to mnemonic should fail", () => {
     "patient feed learn prison angle convince first napkin uncover track open theory"
   );
 });
+
+describe("generateAddress", () => {
+  it("should generate an address with a mnemonic", () => {
+    // Call the function
+    const result = RavencoinKey.generateAddress();
+
+    // Assertions
+    expect(result).toHaveProperty("mnemonic");
+    expect(result.mnemonic).toBeDefined();
+    expect(result.network).toBe("rvn"); //Test default
+    expect(result).toHaveProperty("address"); // replace 'key' with the actual property you expect in addressObject
+    // ... you can add more assertions based on the expected structure of the result
+  });
+
+  it("default network should be rvn for Ravencoin", () => {
+    // Call the function
+    const result = RavencoinKey.generateAddress();
+    // Assertions
+    expect(result.network).toBe("rvn"); //Test default
+  });
+
+  // Add more tests if needed to cover different scenarios
+});
