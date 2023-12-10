@@ -9,6 +9,7 @@ const CoinKey = require("coinkey");
 //From seed to key
 //const HDKey = require("hdkey");
 import HDKey from "hdkey";
+import { IAddressObject } from "./types";
 
 //Could not declare Network as enum, something wrong with parcel bundler
 export type Network = "rvn" | "rvn-test" | "evr" | "evr-test";
@@ -77,7 +78,11 @@ export function getHDKey(network: Network, mnemonic: string): any {
   return hdKey;
 }
 
-export function getAddressByPath(network: Network, hdKey: any, path: string) {
+export function getAddressByPath(
+  network: Network,
+  hdKey: any,
+  path: string
+): IAddressObject {
   const chain = getNetwork(network);
   const derived = hdKey.derive(path);
   var ck2 = new CoinKey(derived.privateKey, chain);
@@ -117,7 +122,9 @@ export function getAddressByWIF(network: Network, privateKeyWIF: string) {
 
 export const entropyToMnemonic = bip39.entropyToMnemonic;
 
-export function generateAddress(network: Network = "rvn") {
+export function generateAddressObject(
+  network: Network = "rvn"
+): IAddressObject {
   const mnemonic = generateMnemonic();
   const account = 0;
   const position = 0;
@@ -130,6 +137,17 @@ export function generateAddress(network: Network = "rvn") {
     network,
   };
   return result;
+}
+
+/**
+ * Generates a random Address Object
+ *
+ * @deprecated use generateAddressObject
+ * @param network
+ * @returns
+ */
+export function generateAddress(network: Network = "rvn") {
+  return generateAddressObject(network);
 }
 export default {
   entropyToMnemonic,

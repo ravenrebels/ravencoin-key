@@ -73,7 +73,7 @@ test("Non valid bytes to mnemonic should fail", () => {
 describe("generateAddress", () => {
   it("should generate an address with a mnemonic", () => {
     // Call the function
-    const result = RavencoinKey.generateAddress();
+    const result = RavencoinKey.generateAddressObject();
 
     // Assertions
     expect(result).toHaveProperty("mnemonic");
@@ -84,10 +84,19 @@ describe("generateAddress", () => {
   });
 
   it("default network should be rvn for Ravencoin", () => {
+    const network = "rvn-test";
     // Call the function
-    const result = RavencoinKey.generateAddress();
+    const result = RavencoinKey.generateAddressObject(network);
     // Assertions
-    expect(result.network).toBe("rvn"); //Test default
+    expect(result.network).toBe(network); //Test default
+  });
+
+  it("Should handle rvn-test", () => {
+    const network = "rvn-test";
+    // Call the function
+    const result = RavencoinKey.generateAddressObject(network);
+    // Assertions
+    expect(result.network).toBe(network); //Test default
   });
 
   // Add more tests if needed to cover different scenarios
