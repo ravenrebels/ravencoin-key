@@ -1,6 +1,6 @@
 {
   "name": "@ravenrebels/ravencoin-key",
-  "version": "2.7.0",
+  "version": "2.8.0",
   "description": "Generate Ravencoin addresses from mnemonic code. BIP32, BIP39, BIP44",
   "source": "index.ts",
   "main": "dist/main.js",
