@@ -70,6 +70,29 @@ test("Non valid bytes to mnemonic should fail", () => {
   );
 });
 
+describe("Validate diff languages", () => {
+  it("Should accept spanish mnemonic", () => {
+    const m =
+      "velero nuera pepino reír barro reforma negar rumbo atento separar pesa puma";
+    const valid = RavencoinKey.isMnemonicValid(m);
+    expect(valid).toBe(true);
+  });
+
+  it("Should accept French mnemonic", () => {
+    const m =
+      "vaseux mixte ozone quiétude besogne punaise membre réussir avarice samedi pantalon poney";
+    const valid = RavencoinKey.isMnemonicValid(m);
+    expect(valid).toBe(true);
+  });
+});
+
+it("Should accept Italian mnemonic", () => {
+  const m =
+    "veloce perforare recinto sciroppo bici scelto parabola sguardo avanzato sonnifero remoto rustico";
+  const valid = RavencoinKey.isMnemonicValid(m);
+  expect(valid).toBe(true);
+});
+
 describe("generateAddress", () => {
   it("should generate an address with a mnemonic", () => {
     // Call the function

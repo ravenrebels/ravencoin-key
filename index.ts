@@ -100,7 +100,17 @@ export function generateMnemonic() {
 }
 
 export function isMnemonicValid(mnemonic: string) {
-  return bip39.validateMnemonic(mnemonic);
+  //Check all languages
+  const wordlists = Object.values(bip39.wordlists);
+
+  //If mnemonic is valid in any language, return true, otherwise false
+  for (const wordlist of wordlists) {
+    const v = bip39.validateMnemonic(mnemonic, wordlist);
+    if (v === true) {
+      return true;
+    }
+  }
+  return false;
 }
 /**
  *
