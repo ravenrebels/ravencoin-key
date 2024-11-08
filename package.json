@@ -1,31 +1,31 @@
 {
-  "name": "@ravenrebels/ravencoin-key",
+  "name": "@Telestai-Project/telestai-key",
   "version": "2.8.0",
-  "description": "Generate Ravencoin addresses from mnemonic code. BIP32, BIP39, BIP44",
+  "description": "Generate Telestai addresses from mnemonic code. BIP32, BIP39, BIP44",
   "source": "index.ts",
   "main": "dist/main.js",
   "module": "dist/module.js",
   "types": "dist/types.d.ts",
   "scripts": {
-    "browserify": "browserify ./dist/main.js  --standalone RavencoinKey -o ./dist/RavencoinKey.js",
+    "browserify": "browserify ./dist/main.js  --standalone TelestaiKey -o ./dist/TelestaiKey.js",
     "build": "npx parcel build && npm run browserify",
     "test": "jest ./test.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ravenrebels/ravencoin-key.git"
+    "url": "git+https://github.com/Telestai-Project/telestai-key.git"
   },
   "keywords": [
-    "Ravencoin",
+    "Telestai",
     "BIP44",
     "BIP39"
   ],
-  "author": "Raven Rebels / Dick Henrik Larsson",
+  "author": "Telestai Project / Zachary Price",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ravenrebels/ravencoin-key/issues"
+    "url": "https://github.com/Telestai-Project/telestai-key/issues"
   },
-  "homepage": "https://github.com/ravenrebels/ravencoin-key#readme",
+  "homepage": "https://github.com/Telestai-Project/telestai-key#readme",
   "dependencies": {
     "@hyperbitjs/chains": "^1.2.0",
     "bip39": "^3.0.4",

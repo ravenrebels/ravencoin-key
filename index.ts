@@ -12,34 +12,35 @@ import HDKey from "hdkey";
 import { IAddressObject } from "./types";
 
 //Could not declare Network as enum, something wrong with parcel bundler
-export type Network = "rvn" | "rvn-test" | "evr" | "evr-test";
+export type Network = "tls";
 
 function getNetwork(name: Network) {
-  const c = name.toLowerCase(); //Just to be sure
-  const map = {
-    rvn: chains.rvn.mainnet.versions,
-    "rvn-test": chains.rvn.testnet?.versions,
-    evr: chains.evr.mainnet.versions,
-    "evr-test": chains.evr.testnet?.versions,
-  };
-
-  const network = map[c];
-  if (!network) {
-    throw new Error("network must be of value " + Object.keys(map).toString());
+  if (name !== "tls") {
+    throw new Error("network must be 'tls'");
   }
-  return network;
+
+  return {
+    bip32: {
+      private: 0x0488ade4,
+      public: 0x0488b21e,
+    },
+    bip44: 10117,
+    private: 0x80,
+    public: 0x42,
+    scripthash: 0x7F,
+  };
 }
 /**
  *
  * @param network
- * @returns the coin type for the network (blockchain), for example Ravencoin has coin type 175
+ * @returns the coin type for the network (blockchain)
  */
 export function getCoinType(network: Network) {
   const chain = getNetwork(network);
   return chain.bip44;
 }
 /**
- * @param network - should have value "rvn", "rvn-test", "evr" or "evr-test"
+ * @param network - should have value "tls"
  * @param mnemonic - your mnemonic
  * @param account - accounts in BIP44 starts from 0, 0 is the default account
  * @param position - starts from 0
@@ -133,7 +134,7 @@ export function getAddressByWIF(network: Network, privateKeyWIF: string) {
 export const entropyToMnemonic = bip39.entropyToMnemonic;
 
 export function generateAddressObject(
-  network: Network = "rvn"
+  network: Network = "tls"
 ): IAddressObject {
   const mnemonic = generateMnemonic();
   const account = 0;
@@ -156,7 +157,7 @@ export function generateAddressObject(
  * @param network
  * @returns
  */
-export function generateAddress(network: Network = "rvn") {
+export function generateAddress(network: Network = "tls") {
   return generateAddressObject(network);
 }
 export default {
