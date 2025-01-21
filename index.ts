@@ -4,14 +4,13 @@ import { chains } from "@hyperbitjs/chains";
 //bip39 from mnemonic to seed
 import * as bip39 from "bip39";
 
-const CoinKey = require("coinkey");
-
 //From seed to key
-//const HDKey = require("hdkey");
-import HDKey from "hdkey";
+import { HDKey } from '@scure/bip32';
 import { IAddressObject } from "./types";
+import { ec as EC } from 'elliptic';
+import bs58check from 'bs58check';
+import { createHash } from 'crypto';
 
-//Could not declare Network as enum, something wrong with parcel bundler
 export type Network = "tls";
 
 function getNetwork(name: Network) {
@@ -56,8 +55,6 @@ export function getAddressPair(
 
   //https://github.com/satoshilabs/slips/blob/master/slip-0044.md
 
-  //Syntax of BIP44
-  //m / purpose' / coin_type' / account' / change / address_index
   const externalPath = `m/44'/${coin_type}'/${account}'/0/${position}`;
   const externalAddress = getAddressByPath(network, hdKey, externalPath);
 
@@ -74,7 +71,6 @@ export function getAddressPair(
 export function getHDKey(network: Network, mnemonic: string): any {
   const chain = getNetwork(network);
   const seed = bip39.mnemonicToSeedSync(mnemonic).toString("hex");
-  //From the seed, get a hdKey, can we use CoinKey instead?
   const hdKey = HDKey.fromMasterSeed(Buffer.from(seed, "hex"), chain.bip32);
   return hdKey;
 }
@@ -86,13 +82,24 @@ export function getAddressByPath(
 ): IAddressObject {
   const chain = getNetwork(network);
   const derived = hdKey.derive(path);
-  var ck2 = new CoinKey(derived.privateKey, chain);
+
+  const ec = new EC('secp256k1');
+  const keyPair = ec.keyFromPrivate(derived.privateKey);
+  const publicKey = keyPair.getPublic().encodeCompressed('hex');
+
+  const sha256Hash = createHash('sha256').update(Buffer.from(publicKey, 'hex')).digest();
+  const publicKeyHash = createHash('ripemd160').update(sha256Hash).digest();
+
+  const address = bs58check.encode(Buffer.concat([Buffer.from([chain.public]), publicKeyHash]));
+
+  const wifBuffer = Buffer.concat([Buffer.from([chain.private]), derived.privateKey, Buffer.from([0x01])]);
+  const wif = bs58check.encode(wifBuffer);
 
   return {
-    address: ck2.publicAddress,
+    address: address,
     path: path,
-    privateKey: ck2.privateKey.toString("hex"),
-    WIF: ck2.privateWif,
+    privateKey: derived.privateKey.toString('hex'),
+    WIF: wif,
   };
 }
 
@@ -101,10 +108,8 @@ export function generateMnemonic() {
 }
 
 export function isMnemonicValid(mnemonic: string) {
-  //Check all languages
   const wordlists = Object.values(bip39.wordlists);
 
-  //If mnemonic is valid in any language, return true, otherwise false
   for (const wordlist of wordlists) {
     const v = bip39.validateMnemonic(mnemonic, wordlist);
     if (v === true) {
@@ -121,13 +126,23 @@ export function isMnemonicValid(mnemonic: string) {
  */
 
 export function getAddressByWIF(network: Network, privateKeyWIF: string) {
-  const coinKey = CoinKey.fromWif(privateKeyWIF);
-  coinKey.versions = getNetwork(network);
+  const decoded = bs58check.decode(privateKeyWIF);
+  const privateKey = Buffer.from(decoded.slice(1, 33));
+
+  const ec = new EC('secp256k1');
+  const keyPair = ec.keyFromPrivate(privateKey);
+  const publicKey = keyPair.getPublic().encodeCompressed('hex');
+
+  const sha256Hash = createHash('sha256').update(Buffer.from(publicKey, 'hex')).digest();
+  const publicKeyHash = createHash('ripemd160').update(sha256Hash).digest();
+
+  const chain = getNetwork(network);
+  const address = bs58check.encode(Buffer.concat([Buffer.from([chain.public]), publicKeyHash]));
 
   return {
-    address: coinKey.publicAddress,
-    privateKey: coinKey.privateKey.toString("hex"),
-    WIF: coinKey.privateWif,
+    address: address,
+    privateKey: privateKey.toString('hex'),
+    WIF: privateKeyWIF,
   };
 }
 
