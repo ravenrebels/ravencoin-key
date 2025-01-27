@@ -11,7 +11,7 @@ import { ec as EC } from 'elliptic';
 import bs58check from 'bs58check';
 import { createHash } from 'crypto';
 
-export type Network = "tls";
+export type Network = "tls" | "tls-test";
 
 function getNetwork(name: Network) {
   if (name !== "tls") {
