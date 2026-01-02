@@ -128,7 +128,7 @@ export function getAddressByWIF(network: Network, privateKeyWIF: string) {
     privateKey: coinKey.privateKey.toString("hex"),
     publicKey: coinKey.publicKey.toString("hex"),
     WIF: coinKey.privateWif,
-  };
+  } as IAddressObject;
 }
 
 export const entropyToMnemonic = bip39.entropyToMnemonic;
@@ -160,7 +160,7 @@ export function generateAddressObject(
 export function generateAddress(network: Network = "rvn") {
   return generateAddressObject(network);
 }
-export default {
+const RavencoinKey = {
   entropyToMnemonic,
   generateAddress,
   generateAddressObject,
@@ -172,3 +172,5 @@ export default {
   getHDKey,
   isMnemonicValid,
 };
+
+export default RavencoinKey;
