@@ -163,6 +163,7 @@ export function generateAddress(network: Network = "rvn") {
 export default {
   entropyToMnemonic,
   generateAddress,
+  generateAddressObject,
   generateMnemonic,
   getAddressByPath,
   getAddressByWIF,
