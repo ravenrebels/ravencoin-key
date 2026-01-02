@@ -11,6 +11,7 @@ test("Validate address on main-net", () => {
     "orphan resemble brain dwarf bus fancy horn among cricket logic duty crater";
   const address = RavencoinKey.getAddressPair(network, mnemonic, 0, 1);
   expect(address.external.address).toBe("RKbP9SMo2KTKWsiTrEDhTWPuaTwfuPiN8G");
+  expect(address.external.publicKey).toBe("038949bfe6150838e253966636bf6dc374d8036cd699a81fbdd96b0042978145cb");
 });
 
 test("Validate address on test-net", () => {
@@ -50,6 +51,7 @@ test("Validate get public address from Wallet Import Format (WIF) main-net ", ()
   const addressObject = RavencoinKey.getAddressByWIF(network, WIF);
 
   expect(addressObject.address).toBe("RKbP9SMo2KTKWsiTrEDhTWPuaTwfuPiN8G");
+  expect(addressObject.publicKey).toBe("038949bfe6150838e253966636bf6dc374d8036cd699a81fbdd96b0042978145cb");
 });
 
 test("Valid bytes to mnemonic", () => {

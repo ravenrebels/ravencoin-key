@@ -15,8 +15,8 @@ import { IAddressObject } from "./types";
 export type Network = "rvn" | "rvn-test" | "evr" | "evr-test";
 
 function getNetwork(name: Network) {
-  const c = name.toLowerCase(); //Just to be sure
-  const map = {
+  const c = name.toLowerCase() as Network; //Just to be sure
+  const map: Record<Network, any> = {
     rvn: chains.rvn.mainnet.versions,
     "rvn-test": chains.rvn.testnet?.versions,
     evr: chains.evr.mainnet.versions,
@@ -72,9 +72,8 @@ export function getAddressPair(
 
 export function getHDKey(network: Network, mnemonic: string): any {
   const chain = getNetwork(network);
-  const seed = bip39.mnemonicToSeedSync(mnemonic).toString("hex");
-  //From the seed, get a hdKey, can we use CoinKey instead?
-  const hdKey = HDKey.fromMasterSeed(Buffer.from(seed, "hex"), chain.bip32);
+  const seed = bip39.mnemonicToSeedSync(mnemonic);
+  const hdKey = HDKey.fromMasterSeed(seed, chain.bip32);
   return hdKey;
 }
 
@@ -85,12 +84,13 @@ export function getAddressByPath(
 ): IAddressObject {
   const chain = getNetwork(network);
   const derived = hdKey.derive(path);
-  var ck2 = new CoinKey(derived.privateKey, chain);
+  const ck2 = new CoinKey(derived.privateKey, chain);
 
   return {
     address: ck2.publicAddress,
     path: path,
     privateKey: ck2.privateKey.toString("hex"),
+    publicKey: ck2.publicKey.toString("hex"),
     WIF: ck2.privateWif,
   };
 }
@@ -126,6 +126,7 @@ export function getAddressByWIF(network: Network, privateKeyWIF: string) {
   return {
     address: coinKey.publicAddress,
     privateKey: coinKey.privateKey.toString("hex"),
+    publicKey: coinKey.publicKey.toString("hex"),
     WIF: coinKey.privateWif,
   };
 }

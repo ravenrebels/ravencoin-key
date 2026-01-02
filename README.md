@@ -1,174 +1,131 @@
-# ravencoin-key
+# @ravenrebels/ravencoin-key
 
-Generate Ravencoin addresses from a mnemonic phrase following the standards BIP32, BIP39, BIP44.
+Generate Ravencoin and Evrmore addresses from a mnemonic phrase following the standards **BIP32**, **BIP39**, and **BIP44**.
 
-That is, use your 12 words to get addresses for Ravencoin mainnet and testnet.
-The library also support Evrmorecoin EVR, both mainnet and testnet.
+Professional, lightweight, and easy-to-use library for handling hierarchical deterministic (HD) keys and addresses.
 
+---
 
-## Example get external and internal (change) addresses by path
+## Quick Start
 
-A simple and "spot on" way to generate/derive addresses.
+The easiest way to generate a new wallet with a random mnemonic:
 
-If you need brutal performance check out getAddressByPath example below.
-
-```
+```typescript
 import RavencoinKey from "@ravenrebels/ravencoin-key";
-//Or import as CommonsJS module
-//const RavencoinKey = require("@ravenrebels/ravencoin-key");
 
-const mnemonic = RavencoinKey.generateMnemonic();
-const ACCOUNT = 0; //default is zero
-const POSITION = 0; //the first address for this wallet
-const network = "rvn"; //or rvn-test for testnet
-const addressPair = RavencoinKey.getAddressPair(
-  network,
-  mnemonic,
-  ACCOUNT,
-  POSITION
-);
-
-console.info("Mnemonic", mnemonic);
-
-console.log(addressPair);
+const wallet = RavencoinKey.generateAddressObject("rvn");
+console.log(wallet);
 ```
 
-Outputs
-
-```
-Mnemonic wrong breeze brick wrestle exotic erode news clown copy install marble promote
+**Output:**
+```json
 {
-  internal: {
-    address: 'RC7Vn28tGaNrJtBm8MX5RCeCvzMpqZ1MgG',
-    path: "m/44'/175'/0'/1/0",
-    privateKey: 'a2c71a4284ed6792debd68d830a10515051fd166ce00535bf9fd19573ed5413b',
-    WIF: 'L2g8U3ZNBLBQcy5f6C67h2eosps3MGkNmeNnk6Y8fZiMdSB9TuCJ'
-  },
-  external: {
-    address: 'RE8YxTSYYcftnbX56rnAEwaiddqaqt8UgX',
-    path: "m/44'/175'/0'/0/0",
-    privateKey: 'b998a218e6bfde7162460893f79afc14b82b14e368507f5a85de28848ea96439',
-    WIF: 'L3SV871B2mpUPTvj4U38UEp3Ah3wCVukF7tG2btHgjkiUSXRftSw'
-  },
-  position: 0
+  "address": "RKbP9SMo2KTKWsiTrEDhTWPuaTwfuPiN8G",
+  "mnemonic": "orphan resemble brain dwarf bus fancy horn among cricket logic duty crater",
+  "privateKey": "a5592434532a09a73350906f7846d272135a56b5a34d900659b31d2bb1aa6dfe",
+  "publicKey": "038949bfe6150838e253966636bf6dc374d8036cd699a81fbdd96b0042978145cb",
+  "WIF": "KyWuYcev1hJ7YJZTjWx8coXNRm4jRbMEhgVVVC8vDcTaKRCMASUE",
+  "network": "rvn",
+  "path": "m/44'/175'/0'/0/0"
 }
 ```
 
-## Example get the first public address for a wallet by BIP44 path
+---
 
-Note this is the fastest way to generate/derive addresses since we can re-use the hdKey object.
+## Supported Networks
 
-BUT its more technical since you have to provide the full BIP44 path.
+| Network Code | Description |
+| :--- | :--- |
+| `rvn` | Ravencoin Mainnet |
+| `rvn-test` | Ravencoin Testnet |
+| `evr` | Evrmore Mainnet |
+| `evr-test` | Evrmore Testnet |
 
+---
+
+## Features & Examples
+
+### Get External and Internal (Change) Addresses
+Derive standard BIP44 address pairs.
+
+```typescript
+const mnemonic = "wrong breeze brick wrestle exotic erode news clown copy install marble promote";
+const ACCOUNT = 0;
+const POSITION = 0;
+
+const addressPair = RavencoinKey.getAddressPair("rvn", mnemonic, ACCOUNT, POSITION);
+
+// Returns custom objects for both internal (change) and external addresses
+console.log(addressPair.external);
 ```
-import RavencoinKey from "@ravenrebels/ravencoin-key";
 
-//use RavencoinKey.generateMnemonic() to generate mnemonic codes
-const mnemonic =
-  "Mnemonic erosion total live dial hamster helmet top response cash obey anger balcony";
-const path = "m/44'/175'/0'/0/0";
-const network = "rvn"; //or rvn-test for testnet
+### High Performance Derivation
+If you need to derive thousands of addresses, reuse the `hdKey` object for maximum performance.
+
+```typescript
 const hdKey = RavencoinKey.getHDKey("rvn", mnemonic);
-
-const address = RavencoinKey.getAddressByPath(network, hdKey, path);
-
-console.log(address);
-
+const path = "m/44'/175'/0'/0/0";
+const address = RavencoinKey.getAddressByPath("rvn", hdKey, path);
 ```
 
-Outputs
+### Import via WIF (Wallet Import Format)
+Get public info from a private WIF key.
 
-```
-{
-  address: 'RWj697pj6PijkEcJLW3BLPG4GKre3BtgRP',
-  path: "m/44'/175'/0'/0/0",
-  privateKey: 'a5592434532a09a73350906f7846d272135a56b5a34d900659b31d2bb1aa6dfe',
-  WIF: 'L2m8GmGYVAkvUEtLdhbFidQW2Zn3fULpE7sbWgmXChygNEBPd1PK'
-}
-```
+```typescript
+const WIF = "KyWuYcev1hJ7YJZTjWx8coXNRm4jRbMEhgVVVC8vDcTaKRCMASUE";
+const addressObj = RavencoinKey.getAddressByWIF("rvn", WIF);
 
-## How to import into your project
-
-### ES6 module
-
-```
-//As ES6 module
-import RavencoinKey from "@ravenrebels/ravencoin-key";
+console.log(addressObj.address); // RKbP9...
+console.log(addressObj.publicKey); // 03894...
 ```
 
-### CommonsJS module
+---
 
-```
-//As CommonsJS module
-const RavencoinKey = require("@ravenrebels/ravencoin-key");
-```
+## Installation
 
-### Browserify
-
-```
-//A browseriy:d version, with all the dependencies bundled for the web
-<html>
-  <body>
-    <script src="./node_modules/@ravenrebels/ravencoin-key/dist/RavencoinKey.js"></script>
-    <script>
-      alert(RavencoinKey.generateMnemonic());
-    </script>
-  </body>
-</html>
+```bash
+npm install @ravenrebels/ravencoin-key
 ```
 
-## install
+---
 
-` npm install @ravenrebels/ravencoin-key`
+## Technical Details
 
-## build
+### BIP Standards Support
+This library follows industry standards for HD wallets:
+- **BIP32**: Hierarchical Deterministic Wallets.
+- **BIP39**: Mnemonic code for generating deterministic keys.
+- **BIP44**: Multi-Account Hierarchy for Deterministic Wallets.
 
-` npm run build`
-
-## test
-
-`npm test`
-
-Note, the tests run on the built version, so you need to build before you run the tests
-
-## BIP32
-
-> BIP32 is the specification which introduced the standard for hierarchical deterministic (HD) wallets and extended keys to Bitcoin. Deterministic wallets can generate multiple "child" key pair chains from a master private "root" key in a deterministic way.[5][6] With the adoption of this standard, keys could be transferred between wallet software with a single extended private key (xprv), greatly improving the interoperability of wallets.
-
-Quote from: https://en.m.wikipedia.org/wiki/Bitcoin_Improvement_Proposals#BIP32
-
-Source: https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
-
-## BIP39
-
-> BIP39 is a proposal describing the use of plain language words chosen from a specific word list,[8] and the process for using such a string to derive a random seed used to generate a wallet as described in BIP32. This approach of utilizing a mnemonic phrase offered a much more user friendly experience for backup and recovery of cryptocurrency wallets.
-
-Quote from: https://en.m.wikipedia.org/wiki/Bitcoin_Improvement_Proposals#BIP39
-
-Source: https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki
-
-## BIP44
-
-> BIP44 defines a logical hierarchy for deterministic wallets based on an algorithm described in BIP32 and purpose scheme described in BIP43. It allows the handling of multiple coins, multiple accounts, external and internal chains per account and millions of addresses per chain
-
-Quote from: https://en.m.wikipedia.org/wiki/Bitcoin_Improvement_Proposals#BIP44
-
-Source: https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
-
+### BIP44 Path Structure
 `m / purpose' / coin_type' / account' / change / address_index`
 
-So in the case of Ravencoin the path m/44'/175'/0'/0/0 says "give me the first address"
+For Ravencoin:
+- **Purpose**: `44'`
+- **Coin Type**: `175'`
+- **Account**: `0'` (Default)
+- **Change**: `0` (External) or `1` (Internal/Change)
 
-The first part m/44'/175' says that the purpose is to use BIP44 with Ravencoin (175). Consider that static code.
+---
 
-Accounts is deprecated and should be 0
+## Development
 
-Change: should be 0 or 1, 0 for external addresses and 1 for the change address
+### Build
+Generate distribution files:
+```bash
+npm run build
+```
 
-### Address gap limit
+### Test
+Run the test suite (requires build):
+```bash
+npm test
+```
 
-> Address gap limit is currently set to 20. If the software hits 20 unused addresses in a row, it expects there are no used addresses beyond this point and stops searching the address chain. We scan just the external chains, because internal chains receive only coins that come from the associated external chains.
->
-> Wallet software should warn when the user is trying to exceed the gap limit on an external chain by generating a new address.
+---
 
-Source: https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
+## License
+MIT
+
+---
+*Maintained by Raven Rebels / Dick Henrik Larsson*
