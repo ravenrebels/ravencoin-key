@@ -4,10 +4,14 @@ import { chains } from "@hyperbitjs/chains";
 //bip39 from mnemonic to seed
 import * as bip39 from "bip39";
 
-const CoinKey = require("coinkey");
+import { Buffer } from "buffer";
+// @ts-ignore: bs58check ESM exports a default but types do not
+import bs58check from "bs58check";
+import * as wif from "wif";
 
 //From seed to key
 //const HDKey = require("hdkey");
+// @ts-ignore: esModuleInterop is not enabled for this project
 import HDKey from "hdkey";
 import { IAddressObject } from "./types";
 
@@ -17,10 +21,10 @@ export type Network = "rvn" | "rvn-test" | "evr" | "evr-test";
 function getNetwork(name: Network) {
   const c = name.toLowerCase() as Network; //Just to be sure
   const map: Record<Network, any> = {
-    rvn: chains.rvn.mainnet.versions,
-    "rvn-test": chains.rvn.testnet?.versions,
-    evr: chains.evr.mainnet.versions,
-    "evr-test": chains.evr.testnet?.versions,
+    rvn: (chains.rvn.mainnet as any).versions,
+    "rvn-test": (chains.rvn.testnet as any)?.versions,
+    evr: (chains.evr.mainnet as any).versions,
+    "evr-test": (chains.evr.testnet as any)?.versions,
   };
 
   const network = map[c];
@@ -84,14 +88,24 @@ export function getAddressByPath(
 ): IAddressObject {
   const chain = getNetwork(network);
   const derived = hdKey.derive(path);
-  const ck2 = new CoinKey(derived.privateKey, chain);
+
+  const pubKeyHashVersion = Buffer.from([chain.public]);
+  // @ts-ignore - identifier exists on HDKey instances but not in types
+  const addressBuffer = Buffer.concat([pubKeyHashVersion, derived.identifier]);
+  const address = bs58check.encode(Uint8Array.from(addressBuffer));
+
+  const wifString = wif.encode({
+    version: chain.private,
+    privateKey: derived.privateKey,
+    compressed: true
+  });
 
   return {
-    address: ck2.publicAddress,
+    address: address,
     path: path,
-    privateKey: ck2.privateKey.toString("hex"),
-    publicKey: ck2.publicKey.toString("hex"),
-    WIF: ck2.privateWif,
+    privateKey: derived.privateKey!.toString("hex"),
+    publicKey: derived.publicKey!.toString("hex"),
+    WIF: wifString,
   };
 }
 
@@ -120,14 +134,25 @@ export function isMnemonicValid(mnemonic: string) {
  */
 
 export function getAddressByWIF(network: Network, privateKeyWIF: string) {
-  const coinKey = CoinKey.fromWif(privateKeyWIF);
-  coinKey.versions = getNetwork(network);
+  const chain = getNetwork(network);
+  const decoded = wif.decode(privateKeyWIF);
+  if (decoded.version !== chain.private) {
+    throw new Error("Invalid WIF version for this network");
+  }
+
+  const hk = new HDKey();
+  hk.privateKey = Buffer.from(decoded.privateKey);
+
+  const pubKeyHashVersion = Buffer.from([chain.public]);
+  // @ts-ignore - identifier exists on HDKey instances but not in types
+  const addressBuffer = Buffer.concat([pubKeyHashVersion, (hk as any).identifier]);
+  const address = bs58check.encode(Uint8Array.from(addressBuffer));
 
   return {
-    address: coinKey.publicAddress,
-    privateKey: coinKey.privateKey.toString("hex"),
-    publicKey: coinKey.publicKey.toString("hex"),
-    WIF: coinKey.privateWif,
+    address: address,
+    privateKey: hk.privateKey!.toString("hex"),
+    publicKey: hk.publicKey!.toString("hex"),
+    WIF: privateKeyWIF,
   } as IAddressObject;
 }
 
