@@ -7,8 +7,8 @@
   "module": "dist/module.mjs",
   "types": "dist/types.d.ts",
   "scripts": {
-    "browserify": "browserify ./dist/main.js  --standalone RavencoinKey -o ./dist/RavencoinKey.js",
-    "build": "npx parcel build && npm run browserify",
+    "build:standalone": "esbuild ./dist/module.mjs --bundle --format=iife --global-name=RavencoinKey --outfile=./dist/RavencoinKey.js",
+    "build": "npx parcel build && npm run build:standalone",
     "pretest": "npm run build",
     "test": "jest ./test.js && node ./test-esm.mjs"
   },
@@ -28,20 +28,21 @@
   },
   "homepage": "https://github.com/ravenrebels/ravencoin-key#readme",
   "dependencies": {
+    "@bitcoinerlab/secp256k1": "^1.2.0",
     "@hyperbitjs/chains": "^1.10.2",
+    "bip32": "^5.0.1",
     "bip39": "^3.0.4",
     "bs58check": "^4.0.0",
-    "hdkey": "^2.1.0",
+    "buffer": "^6.0.3",
     "wif": "^5.0.0"
   },
   "devDependencies": {
     "@parcel/packager-ts": "2.16.4",
     "@parcel/transformer-typescript-types": "2.16.4",
     "@types/bs58check": "^2.1.2",
-    "@types/hdkey": "^2.1.0",
     "@types/node": "^25.3.0",
     "@types/wif": "^2.0.5",
-    "browserify": "^17.0.1",
+    "esbuild": "^0.28.1",
     "jest": "30.2.0",
     "parcel": "2.16.4",
     "typescript": "5.9.3"

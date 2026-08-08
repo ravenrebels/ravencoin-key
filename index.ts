@@ -10,9 +10,9 @@ import bs58check from "bs58check";
 import * as wif from "wif";
 
 //From seed to key
-//const HDKey = require("hdkey");
-// @ts-ignore: esModuleInterop is not enabled for this project
-import HDKey from "hdkey";
+import { BIP32Factory } from 'bip32';
+import * as ecc from '@bitcoinerlab/secp256k1';
+const bip32 = BIP32Factory(ecc);
 import { IAddressObject } from "./types";
 
 //Could not declare Network as enum, something wrong with parcel bundler
@@ -77,7 +77,7 @@ export function getAddressPair(
 export function getHDKey(network: Network, mnemonic: string): any {
   const chain = getNetwork(network);
   const seed = bip39.mnemonicToSeedSync(mnemonic);
-  const hdKey = HDKey.fromMasterSeed(seed, chain.bip32);
+  const hdKey = bip32.fromSeed(seed, { bip32: chain.bip32, wif: chain.private } as any);
   return hdKey;
 }
 
@@ -87,24 +87,23 @@ export function getAddressByPath(
   path: string
 ): IAddressObject {
   const chain = getNetwork(network);
-  const derived = hdKey.derive(path);
+  const derived = hdKey.derivePath(path);
 
   const pubKeyHashVersion = Buffer.from([chain.public]);
-  // @ts-ignore - identifier exists on HDKey instances but not in types
-  const addressBuffer = Buffer.concat([pubKeyHashVersion, derived.identifier]);
+  const addressBuffer = Buffer.concat([pubKeyHashVersion, Buffer.from(derived.identifier!)]);
   const address = bs58check.encode(Uint8Array.from(addressBuffer));
 
   const wifString = wif.encode({
     version: chain.private,
-    privateKey: derived.privateKey,
+    privateKey: Buffer.from(derived.privateKey!),
     compressed: true
   });
 
   return {
     address: address,
     path: path,
-    privateKey: derived.privateKey!.toString("hex"),
-    publicKey: derived.publicKey!.toString("hex"),
+    privateKey: Buffer.from(derived.privateKey!).toString("hex"),
+    publicKey: Buffer.from(derived.publicKey!).toString("hex"),
     WIF: wifString,
   };
 }
@@ -140,18 +139,20 @@ export function getAddressByWIF(network: Network, privateKeyWIF: string) {
     throw new Error("Invalid WIF version for this network");
   }
 
-  const hk = new HDKey();
-  hk.privateKey = Buffer.from(decoded.privateKey);
+  const hk = bip32.fromPrivateKey(
+    Buffer.from(decoded.privateKey),
+    Buffer.alloc(32),
+    { bip32: chain.bip32, wif: chain.private } as any
+  );
 
   const pubKeyHashVersion = Buffer.from([chain.public]);
-  // @ts-ignore - identifier exists on HDKey instances but not in types
-  const addressBuffer = Buffer.concat([pubKeyHashVersion, (hk as any).identifier]);
+  const addressBuffer = Buffer.concat([pubKeyHashVersion, Buffer.from(hk.identifier!)]);
   const address = bs58check.encode(Uint8Array.from(addressBuffer));
 
   return {
     address: address,
-    privateKey: hk.privateKey!.toString("hex"),
-    publicKey: hk.publicKey!.toString("hex"),
+    privateKey: Buffer.from(hk.privateKey!).toString("hex"),
+    publicKey: Buffer.from(hk.publicKey!).toString("hex"),
     WIF: privateKeyWIF,
   } as IAddressObject;
 }
